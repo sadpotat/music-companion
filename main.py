@@ -1,58 +1,58 @@
 import streamlit as st
-from backend import set_background, get_lyrics_search, get_lyrics_audio
+import backend as be
 
 st.set_page_config(page_title="Companion",
                    page_icon=":musical_note:", layout="centered")
 
-st.markdown(
-    """
-    <style>
-    .column {
-        float: left;
-        width: 50%;
-        min-width: 10px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+# st.markdown(
+#     """
+#     <style>
+#     .column {
+#         float: left;
+#         width: 50%;
+#         min-width: 10px;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True,
+# )
 
-background = set_background("bg.jpg")
+background = be.set_background("bg.jpg")
 st.markdown(background, unsafe_allow_html=True)
 
 if "lyrics" not in st.session_state:
     st.session_state.lyrics = ""
     st.session_state.height = None
+    st.session_state.song_info = None
 
 
 def search_callback():
-    st.session_state.lyrics = get_lyrics_search(user_search)
-    count = st.session_state.lyrics.count("\n")
-    st.session_state.height = count*30
+    json_data = be.get_song_info(st.session_state.inputbox)
+    # st.session_state.song_info =
+    st.session_state.lyrics = be.get_lyrics_search(json_data)
     print("search_callback")
 
 
 def audio_callback():
-    st.session_state.lyrics = get_lyrics_audio("idk what to pass")
-    count = count = st.session_state.lyrics.count("\n")
-    st.session_state.height = count*30
+    st.session_state.lyrics = be.get_lyrics_audio("idk what to pass")
     print("audio_callback")
 
 
 with st.container():
-    col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([10, 1])
 
     with col1:
-        user_search = st.text_input("**Enter Title and Artist**", placeholder="Song Title;Artist",
+        user_search = st.text_input("**Enter Title and Artist**", placeholder="Song_title Artist_name",
                                     help="Enter a song to view its lyrics, or press the mic icon for song recognition",
                                     on_change=search_callback, key="inputbox")
 
     with col2:
+        st.write("")
         user_audio = st.button(":studio_microphone:",
                                on_click=audio_callback, key="audio")
 
 st.text_area("**Lyrics:**", st.session_state.lyrics,
-             height=st.session_state.height)
+             height=500)
 
 
 print(st.session_state)
