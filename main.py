@@ -23,12 +23,12 @@ st.markdown(background, unsafe_allow_html=True)
 if "lyrics" not in st.session_state:
     st.session_state.lyrics = ""
     st.session_state.height = None
-    st.session_state.song_info = None
+    st.session_state.details = None
 
 
 def search_callback():
-    json_data = be.get_song_info(st.session_state.inputbox)
-    # st.session_state.song_info =
+    json_data = be.get_song_data(st.session_state.inputbox)
+    st.session_state.details = be.get_details(json_data)
     st.session_state.lyrics = be.get_lyrics_search(json_data)
     print("search_callback")
 
@@ -50,6 +50,10 @@ with st.container():
         st.write("")
         user_audio = st.button(":studio_microphone:",
                                on_click=audio_callback, key="audio")
+
+if st.session_state.details:
+    st.text_area("Song Details", st.session_state.details,
+                height=100)
 
 st.text_area("**Lyrics:**", st.session_state.lyrics,
              height=500)

@@ -42,7 +42,7 @@ def set_background(png_file):
     return page_bg_img
 
 
-def get_song_info(query):
+def get_song_data(query):
     """ This functions gets the queried song's information 
         from the Genius API, returns json_data dictionary.
         The query must be SONG_NAME and ARTIST_NAME"""
@@ -111,6 +111,14 @@ def get_lyrics_search(json_data):
         lyrics = lyrics + lyric + "\n"
     return lyrics
 
+def get_details(json_data):
+    return {
+        "imageURL": json_data['response']['song']['header_image_thumbnail_url'],
+        "title": json_data['response']['song']['title'],
+        "artist": json_data['response']['song']['artist_names'],
+        "album": json_data['response']['song']['album']['name'],
+        "release_date": json_data['response']['song']['release_date_for_display'],
+    }
 
 def get_lyrics_audio(audio_stream):
     """ Calls Shazam API for Lyrics """
@@ -120,8 +128,10 @@ def get_lyrics_audio(audio_stream):
 
 if __name__ == "__main__":
     query = "you belong with me taylor swift"
-    json_data = get_song_info(query)
-    lyrics = get_lyrics_search(json_data)
+    json_data = get_song_data(query)
+    details = get_details(json_data)
     # for lyric in lyrics:
     #     print(lyric)
-    print(lyrics)
+    print(details)
+    # json_data['response']['song']['artist_names']
+    # json_data['response']['song']['artist_names']
