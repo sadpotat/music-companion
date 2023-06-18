@@ -11,4 +11,3 @@ You will need a [Genius API](https://docs.genius.com/#/getting-started-h1) acces
 ### Features I haven't implemented yet :
 Audio recognition has not been added yet. I'm thinking of using  [Shazam API](https://github.com/Numenorean/ShazamAPI).
 
-I'll also probably add a section for displaying song info, like artist information, release date and highest ranking on the Billboard 200.
